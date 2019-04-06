@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Notification Log</string>
     <string name="basic_string_format">%s</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancek">Cancel</string>
+    <string name="clear_log">Clear Log</string>
+    <string name="clear_log_dialog">Are you sure you want to clear the notification log? This action can not be undone.</string>
+
+    <string name="settings">Settings</string>
+
 </resources>

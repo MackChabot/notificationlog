@@ -9,6 +9,9 @@ import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 public class NLService extends NotificationListenerService {
+    // true if application is open. False if is just the service that's running
+    // TODO probably replace this variable with a broadcast receiver
+    protected static boolean application_running = false;
 
     private String TAG = this.getClass().getSimpleName();
     //    private NLServiceReceiver nlservicereciver;
@@ -33,8 +36,15 @@ public class NLService extends NotificationListenerService {
         Log.i(TAG,"**********  onNotificationPosted");
         Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
 
-        MainActivity.notificationList.add(sbn);
-        MainActivity.notificationArrayAdapter.notifyDataSetChanged();
+        // If application is running, add the new notification to the list. Otherwise, add it to the database
+        if (application_running) {
+            // Update the list and refresh the listview
+            MainActivityFragment.notificationList.add(sbn);
+            MainActivityFragment.notificationArrayAdapter.notifyDataSetChanged();
+        }
+        else{
+            //TODO
+        }
 
 //        Intent i = new Intent("com.example.mynotificationtrackerapp.NOTIFICATION_LISTENER_EXAMPLE");
 //        i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
@@ -47,8 +57,15 @@ public class NLService extends NotificationListenerService {
         Log.i(TAG,"********** onNOtificationRemoved");
         Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText +"\t" + sbn.getPackageName());
 
-        MainActivity.notificationList.add(sbn);
-        MainActivity.notificationArrayAdapter.notifyDataSetChanged();
+        // If application is running, add the new notification to the list. Otherwise, add it to the database
+        if (application_running) {
+            // Update the list and refresh the listview
+            MainActivityFragment.notificationList.add(sbn);
+            MainActivityFragment.notificationArrayAdapter.notifyDataSetChanged();
+        }
+        else{
+            //TODO
+        }
 //        Intent i = new  Intent("com.example.mynotificationtrackerapp.NOTIFICATION_LISTENER_EXAMPLE");
 //        i.putExtra("notification_event","onNotificationRemoved :" + sbn.getPackageName() + "\n");
 //
