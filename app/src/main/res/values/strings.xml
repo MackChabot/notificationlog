@@ -5,7 +5,10 @@
     <string name="cancek">Cancel</string>
     <string name="clear_log">Clear Log</string>
     <string name="clear_log_dialog">Are you sure you want to clear the notification log? This action can not be undone.</string>
-
+    <string name="ask_permissions">This app requires special permissions to log notifications. Enable it now?</string>
+    <string name="reject_permissions">This app cannot work properly without permissions.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">Ok</string>
     <string name="settings">Settings</string>
-
 </resources>

@@ -5,7 +5,6 @@ import java.util.List;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -18,7 +17,8 @@ public interface DBNotificationDao {
     @Query("SELECT * FROM notifications")
     List<DBNotification> getAll();
 
-    //TODO: consider building exclusion into the query
+    //TODO: consider building exclusion into the query?
+    //table with excluded apps? not sure the best way to do that
     @Query("SELECT * FROM notifications WHERE appname NOT IN (:excludedApps)")
     LiveData<List<DBNotification>> getAllFilteredLive(String[] excludedApps);
 

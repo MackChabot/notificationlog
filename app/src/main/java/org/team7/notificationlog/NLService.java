@@ -55,9 +55,13 @@ public class NLService extends NotificationListenerService {
         if (chs != null)
             text = chs.toString();
 
+        long when = sbn.getNotification().when;
+        long post = sbn.getPostTime();
+        long actual = when != 0 ? when : post;
+
         DBNotification dbn =
                 new DBNotification(sbn.getPackageName(),
-                                    Long.toString(sbn.getNotification().when),
+                                    Long.toString(actual),
                                     getAppName(sbn.getPackageName()),
                                     title,
                                     text);

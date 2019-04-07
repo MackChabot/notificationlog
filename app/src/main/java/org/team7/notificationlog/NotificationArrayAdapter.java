@@ -1,11 +1,14 @@
 package org.team7.notificationlog;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -18,6 +21,7 @@ import androidx.fragment.app.Fragment;
 public class NotificationArrayAdapter extends ArrayAdapter<DBNotification> {
 
     private static class ViewHolder {
+        ImageView iconImageView;
         TextView titleTextView;
         TextView textTextView;
         TextView packageTextView;
@@ -35,8 +39,6 @@ public class NotificationArrayAdapter extends ArrayAdapter<DBNotification> {
     // creates the custom views for the ListView's items
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.i("NotifArrayAdapter", "getView called");
-
         // get Weather object for this specified ListView position
         DBNotification dbn = getItem(position);
         if (dbn == null) {
@@ -53,6 +55,7 @@ public class NotificationArrayAdapter extends ArrayAdapter<DBNotification> {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.list_item, parent, false);
+            viewHolder.iconImageView = convertView.findViewById(R.id.imageView);
             viewHolder.titleTextView = (TextView) convertView.findViewById(R.id.notificationTitle);
             viewHolder.textTextView = (TextView) convertView.findViewById(R.id.notificationText);
             viewHolder.packageTextView = (TextView) convertView.findViewById(R.id.notificationPackage);
@@ -62,24 +65,41 @@ public class NotificationArrayAdapter extends ArrayAdapter<DBNotification> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        // VERY TEMPORARY
-        String title = dbn.title;
+        Drawable icon = getAppIcon(dbn.notifPackage);
+        if (icon != null)
+            viewHolder.iconImageView.setImageDrawable(icon);
 
         DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         Date date = new Date(Long.parseLong(dbn.strTimestamp));
-        title += " - " + fmt.format(date);
 
-        viewHolder.titleTextView.setText(title);
+        // VERY TEMPORARY
+        String title = dbn.title;
+        title += " - " + fmt.format(date);
         // END VERY TEMPORARY
 
+        viewHolder.titleTextView.setText(title);
         viewHolder.textTextView.setText(dbn.text);
         viewHolder.packageTextView.setText(dbn.appName);
 
         return convertView; // return completed list item to display
     }
 
+    private Drawable getAppIcon(String packageName) {
+
+        PackageManager pm = getContext().getPackageManager();
+        Drawable icon = null;
+
+        try {
+            icon = pm.getApplicationIcon(packageName);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("NotificationLog", "Unable to find app for package " + packageName);
+        }
+
+        return icon;
+    }
+
     public void setNotifData(List<DBNotification> dbns) {
-        Log.i("NotifArrayAdapter", "Updating notification data with " + dbns.size() + " notifs");
+        Log.i("NotifArrayAdapter", "Updating notifications data with " + dbns.size() + " notif");
         this.dbns = dbns;
 
         this.clear();
