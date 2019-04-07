@@ -4,7 +4,6 @@ package org.team7.notificationlog;
 
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,13 +15,17 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
 public class MainActivityFragment extends Fragment {
     // List of StatusBarNotification objects representing the forecast
-    public static List<StatusBarNotification> notificationList = new ArrayList<>();
-//    private List<String> stringList = new ArrayList<>();
-
-    // ArrayAdapter for binding Weather objects to a ListView
+    public static List<DBNotification> notificationList = new ArrayList<>();
     public static NotificationArrayAdapter notificationArrayAdapter;
+
     private ListView notificationListView; // displays weather info
 
     // called when Fragment's view needs to be created
@@ -35,15 +38,23 @@ public class MainActivityFragment extends Fragment {
 
         NLService.application_running = true;
 
-        // create ArrayAdapter to bind weatherList to the weatherListView
-        notificationListView = (ListView) view.findViewById(R.id.notificationListView);
-        notificationArrayAdapter = new NotificationArrayAdapter(getActivity().getApplicationContext(), notificationList);
-//        notificationArrayAdapter = new NotificationArrayAdapter(this, notificationList);
+        MainActivityViewModel mvm = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        notificationList = mvm.getNotificationsBase();
+
+        notificationListView = view.findViewById(R.id.notificationListView);
+        notificationArrayAdapter = new NotificationArrayAdapter(this, getActivity().getApplicationContext(), notificationList);
         notificationListView.setAdapter(notificationArrayAdapter);
+
+        // bind to livedata
+        mvm.getNotifications().observe(this, new Observer<List<DBNotification>>() {
+            @Override
+            public void onChanged(List<DBNotification> dbNotifications) {
+                notificationArrayAdapter.setNotifData(dbNotifications);
+            }
+        });
 
         return view;
     }
-
 
     // displays the fragment's menu items
     @Override
@@ -87,7 +98,7 @@ public class MainActivityFragment extends Fragment {
     }
 
     public void clearLog(){
-        notificationList.clear();
+
         notificationArrayAdapter.notifyDataSetChanged();
     }
 

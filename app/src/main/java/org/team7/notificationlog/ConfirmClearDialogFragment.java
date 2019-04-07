@@ -1,11 +1,19 @@
 package org.team7.notificationlog;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+
+import java.util.List;
+
+import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.LiveData;
+import androidx.sqlite.db.SimpleSQLiteQuery;
 
 // class for the Erase Image dialog
 public class ConfirmClearDialogFragment extends DialogFragment {
@@ -22,7 +30,7 @@ public class ConfirmClearDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.confirm,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        getNotificationFragment().clearLog(); // clear image
+                        new RemoveAllTask(getContext()).execute();
                     }
                 }
         );
@@ -36,5 +44,25 @@ public class ConfirmClearDialogFragment extends DialogFragment {
     private MainActivityFragment getNotificationFragment() {
         return (MainActivityFragment) getFragmentManager().findFragmentById(
                 R.id.notificationFragment);
+    }
+}
+
+class RemoveAllTask extends AsyncTask<Void, Void, Void> {
+
+    // The only way to do this afaik
+    @SuppressLint("StaticFieldLeak")
+    private Context c;
+
+    public RemoveAllTask(Context context) {
+        c = context;
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+        NotificationDatabase ndb = NotificationDatabase.getDatabase(c);
+        ndb.clearAllTables();
+        ndb.query(new SimpleSQLiteQuery("UPDATE sqlite_sequence SET seq = 0 WHERE name = \'notifications\'"));
+
+        return null;
     }
 }
