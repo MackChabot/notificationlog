@@ -24,7 +24,8 @@ public class NotificationArrayAdapter extends ArrayAdapter<DBNotification> {
         ImageView iconImageView;
         TextView titleTextView;
         TextView textTextView;
-        TextView packageTextView;
+        TextView timeTextView;
+        TextView nameTextView;
     }
 
     Fragment maf;
@@ -58,7 +59,8 @@ public class NotificationArrayAdapter extends ArrayAdapter<DBNotification> {
             viewHolder.iconImageView = convertView.findViewById(R.id.imageView);
             viewHolder.titleTextView = (TextView) convertView.findViewById(R.id.notificationTitle);
             viewHolder.textTextView = (TextView) convertView.findViewById(R.id.notificationText);
-            viewHolder.packageTextView = (TextView) convertView.findViewById(R.id.notificationPackage);
+            viewHolder.timeTextView = (TextView) convertView.findViewById(R.id.notificationTime);
+            viewHolder.nameTextView = (TextView) convertView.findViewById(R.id.applicationName);
             convertView.setTag(viewHolder);
         }
         else { // reuse existing ViewHolder stored as the list item's tag
@@ -72,14 +74,11 @@ public class NotificationArrayAdapter extends ArrayAdapter<DBNotification> {
         DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         Date date = new Date(Long.parseLong(dbn.strTimestamp));
 
-        // VERY TEMPORARY
-        String title = dbn.title;
-        title += " - " + fmt.format(date);
-        // END VERY TEMPORARY
-
-        viewHolder.titleTextView.setText(title);
+        viewHolder.nameTextView.setText(dbn.appName);
+        viewHolder.timeTextView.setText(fmt.format(date));
+        viewHolder.titleTextView.setText(dbn.title);
         viewHolder.textTextView.setText(dbn.text);
-        viewHolder.packageTextView.setText(dbn.appName);
+
 
         return convertView; // return completed list item to display
     }
