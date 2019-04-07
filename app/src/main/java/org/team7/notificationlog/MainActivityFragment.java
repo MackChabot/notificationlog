@@ -3,7 +3,6 @@
 package org.team7.notificationlog;
 
 import android.os.Bundle;
-import android.service.notification.StatusBarNotification;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,17 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 public class MainActivityFragment extends Fragment {
-    // List of StatusBarNotification objects representing the forecast
-    public static List<DBNotification> notificationList = new ArrayList<>();
     public static NotificationArrayAdapter notificationArrayAdapter;
-
-    private ListView notificationListView; // displays weather info
 
     // called when Fragment's view needs to be created
     @Override
@@ -39,9 +32,11 @@ public class MainActivityFragment extends Fragment {
         NLService.application_running = true;
 
         MainActivityViewModel mvm = ViewModelProviders.of(this).get(MainActivityViewModel.class);
-        notificationList = mvm.getNotificationsBase();
+        // List of StatusBarNotification objects representing the forecast
+        List<DBNotification> notificationList = mvm.getNotificationsBase();
 
-        notificationListView = view.findViewById(R.id.notificationListView);
+        // displays weather info
+        ListView notificationListView = view.findViewById(R.id.notificationListView);
         notificationArrayAdapter = new NotificationArrayAdapter(this, getActivity().getApplicationContext(), notificationList);
         notificationListView.setAdapter(notificationArrayAdapter);
 
@@ -66,6 +61,7 @@ public class MainActivityFragment extends Fragment {
     // handle choice from options menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         // switch based on the MenuItem id
         switch (item.getItemId()) {
 //            case R.id.color:
@@ -96,10 +92,4 @@ public class MainActivityFragment extends Fragment {
         ConfirmClearDialogFragment fragment = new ConfirmClearDialogFragment();
         fragment.show(getFragmentManager(), "erase dialog");
     }
-
-    public void clearLog(){
-
-        notificationArrayAdapter.notifyDataSetChanged();
-    }
-
 }

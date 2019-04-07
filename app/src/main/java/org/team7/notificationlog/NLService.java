@@ -1,19 +1,13 @@
 package org.team7.notificationlog;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
-import android.widget.RemoteViews;
-
-import androidx.room.Room;
 
 public class NLService extends NotificationListenerService {
     // true if application is open. False if is just the service that's running
@@ -22,21 +16,21 @@ public class NLService extends NotificationListenerService {
 
     private String TAG = this.getClass().getSimpleName();
 
-    //    private NLServiceReceiver nlservicereciver;
+    //    private NLServiceReceiver nlservicereciever;
     @Override
     public void onCreate() {
         super.onCreate();
 
-//        nlservicereciver = new NLServiceReceiver();
+//        nlservicereciever = new NLServiceReceiver();
 //        IntentFilter filter = new IntentFilter();
 //        filter.addAction("com.example.mynotificationtrackerapp.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
-//        registerReceiver(nlservicereciver,filter);
+//        registerReceiver(nlservicereciever, filter);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        unregisterReceiver(nlservicereciver);
+//        unregisterReceiver(nlservicereciever);
     }
 
     @Override
@@ -69,40 +63,8 @@ public class NLService extends NotificationListenerService {
         Log.i(TAG, "Running insert task");
         new InsertDbTask(getApplicationContext()).execute(dbn);
 
-        // If application is running, add the new notification to the list. Otherwise, add it to the database
-//        if (application_running) {
-//            // Update the list and refresh the listview
-//            MainActivityFragment.notificationList.add(sbn);
-//            MainActivityFragment.notificationArrayAdapter.notifyDataSetChanged();
-//        }
-//        else {
-//
-//        }
-
 //        Intent i = new Intent("com.example.mynotificationtrackerapp.NOTIFICATION_LISTENER_EXAMPLE");
 //        i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
-//        sendBroadcast(i);
-    }
-
-    /**
-     * I presume we do nothing when we remove a notif?
-     */
-    @Override
-    public void onNotificationRemoved(StatusBarNotification sbn) {
-//        Log.i(TAG,"********** onNOtificationRemoved");
-//        Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText +"\t" + sbn.getPackageName());
-//
-//        // If application is running, add the new notification to the list. Otherwise, add it to the database
-//        if (application_running) {
-//            // Update the list and refresh the listview
-//            MainActivityFragment.notificationList.add(sbn);
-//            MainActivityFragment.notificationArrayAdapter.notifyDataSetChanged();
-//        }
-//        else{
-//        }
-//        Intent i = new  Intent("com.example.mynotificationtrackerapp.NOTIFICATION_LISTENER_EXAMPLE");
-//        i.putExtra("notification_event","onNotificationRemoved :" + sbn.getPackageName() + "\n");
-//
 //        sendBroadcast(i);
     }
 
@@ -133,7 +95,6 @@ public class NLService extends NotificationListenerService {
 //        }
 //    }
 
-    //TODO: when needed, can use similar technique with PackageManager to get app icon
     private String getAppName(String packageName) {
 
         PackageManager pm = getApplicationContext().getPackageManager();
@@ -157,7 +118,7 @@ class InsertDbTask extends AsyncTask<DBNotification, Void, Void> {
     @SuppressLint("StaticFieldLeak")
     private Context c;
 
-    public InsertDbTask(Context context) {
+    InsertDbTask(Context context) {
         c = context;
     }
 
