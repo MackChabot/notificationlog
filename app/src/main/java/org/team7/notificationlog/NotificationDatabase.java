@@ -30,13 +30,13 @@ public abstract class NotificationDatabase extends RoomDatabase {
         INSTANCE = null;
     }
 
-    static final Migration Migration_1_2 = new Migration(1, 2) {
+    private static final Migration Migration_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE notifications ADD COLUMN ongoing BOOLEAN");
             database.execSQL("ALTER TABLE notifications ADD COLUMN noclear BOOLEAN");
-            database.execSQL("UPDATE notifications SET ongoing = 0 WHERE ongoing = NULL");
-            database.execSQL("UPDATE notifications SET noclear = 0 WHERE noclear = NULL");
+            database.execSQL("UPDATE notifications SET ongoing = FALSE WHERE ongoing = NULL");
+            database.execSQL("UPDATE notifications SET noclear = FALSE WHERE noclear = NULL");
         }
     };
 
