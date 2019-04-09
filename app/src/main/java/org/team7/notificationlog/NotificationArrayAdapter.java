@@ -1,12 +1,15 @@
 package org.team7.notificationlog;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,6 +33,20 @@ public class NotificationArrayAdapter extends ArrayAdapter<DBNotification> {
 
     Fragment maf;
     List<DBNotification> dbns;
+
+    private AdapterView.OnItemClickListener itemClickedHandler = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            DBNotification dbn = getItem(position);
+            if (dbn == null)
+                return;
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Debug Notif");
+            builder.setMessage(dbn.toString());
+        }
+    };
 
     // constructor to initialize superclass inherited members
     public NotificationArrayAdapter(Fragment fragment, Context context, List<DBNotification> notifications) {
@@ -79,8 +96,7 @@ public class NotificationArrayAdapter extends ArrayAdapter<DBNotification> {
         viewHolder.titleTextView.setText(dbn.title);
         viewHolder.textTextView.setText(dbn.text);
 
-
-        return convertView; // return completed list item to display
+        return convertView;
     }
 
     private Drawable getAppIcon(String packageName) {
@@ -97,7 +113,7 @@ public class NotificationArrayAdapter extends ArrayAdapter<DBNotification> {
         return icon;
     }
 
-    public void setNotifData(List<DBNotification> dbns) {
+    void setNotifData(List<DBNotification> dbns) {
         Log.i("NotifArrayAdapter", "Updating notifications data with " + dbns.size() + " notif");
         this.dbns = dbns;
 

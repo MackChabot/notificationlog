@@ -1,12 +1,15 @@
 package org.team7.notificationlog;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 
 public class NLService extends NotificationListenerService {
@@ -39,29 +42,8 @@ public class NLService extends NotificationListenerService {
         Log.i(TAG,"**********  onNotificationPosted");
         Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
 
-        //Construct dbn
-        Bundle extra = sbn.getNotification().extras;
-
-        String title = extra.getString("android.title");
-        String text = "";
-
-        CharSequence chs = extra.getCharSequence("android.text");
-        if (chs != null)
-            text = chs.toString();
-
-        long when = sbn.getNotification().when;
-        long post = sbn.getPostTime();
-        long actual = when != 0 ? when : post;
-
-        DBNotification dbn =
-                new DBNotification(sbn.getPackageName(),
-                                    Long.toString(actual),
-                                    getAppName(sbn.getPackageName()),
-                                    title,
-                                    text);
-
         Log.i(TAG, "Running insert task");
-        new InsertDbTask(getApplicationContext()).execute(dbn);
+        new InsertDbTask(getApplicationContext()).execute(getDbn(sbn));
 
 //        Intent i = new Intent("com.example.mynotificationtrackerapp.NOTIFICATION_LISTENER_EXAMPLE");
 //        i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
@@ -94,6 +76,46 @@ public class NLService extends NotificationListenerService {
 //
 //        }
 //    }
+
+    private DBNotification getDbn(StatusBarNotification sbn) {
+        Bundle extra = sbn.getNotification().extras;
+
+        boolean isOngoing = checkFlag(sbn.getNotification(), Notification.FLAG_ONGOING_EVENT);
+        boolean noClear = checkFlag(sbn.getNotification(), Notification.FLAG_NO_CLEAR);
+
+        String title = extra.getString("android.title");
+
+        // Title may be null because it's a SpannableString
+        if (title == null) {
+            try {
+                SpannableString spannableTitle = (SpannableString) extra.get("android.title");
+                if (spannableTitle != null)
+                    title = spannableTitle.toString();
+            } catch (ClassCastException ignore) {} // leave title null
+        }
+
+        String text = "";
+
+        CharSequence chs = extra.getCharSequence("android.text");
+        if (chs != null)
+            text = chs.toString();
+
+        long when = sbn.getNotification().when;
+        long post = sbn.getPostTime();
+        long actual = when != 0 ? when : post;
+
+        return new DBNotification(sbn.getPackageName(),
+                Long.toString(actual),
+                getAppName(sbn.getPackageName()),
+                title,
+                text,
+                isOngoing,
+                noClear);
+    }
+
+    private boolean checkFlag(Notification n, int flag) {
+        return (n.flags & flag) == flag;
+    }
 
     private String getAppName(String packageName) {
 

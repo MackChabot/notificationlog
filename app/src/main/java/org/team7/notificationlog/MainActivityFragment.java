@@ -9,11 +9,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -45,6 +46,21 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onChanged(List<DBNotification> dbNotifications) {
                 notificationArrayAdapter.setNotifData(dbNotifications);
+            }
+        });
+
+        notificationListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                DBNotification dbn = (DBNotification) parent.getItemAtPosition(position);
+                if (dbn == null)
+                    return false;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Debug Notif");
+                builder.setMessage(dbn.toString());
+                builder.create().show();
+                return true;
             }
         });
 

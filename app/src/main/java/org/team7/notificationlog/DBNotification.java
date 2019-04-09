@@ -7,12 +7,14 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "notifications")
 public class DBNotification {
 
-    public DBNotification(String notifPackage, String strTimestamp, String appName, String title, String text) {
+    public DBNotification(String notifPackage, String strTimestamp, String appName, String title, String text, boolean ongoing, boolean noClear) {
         this.notifPackage = notifPackage;
         this.strTimestamp = strTimestamp;
         this.appName = appName;
         this.title = title;
         this.text = text;
+        this.ongoing = ongoing;
+        this.noClear = noClear;
     }
 
     @PrimaryKey(autoGenerate = true)
@@ -32,4 +34,23 @@ public class DBNotification {
 
     @ColumnInfo(name = "notiftext")
     public String text;
+
+    @ColumnInfo(name = "ongoing")
+    public boolean ongoing;
+
+    @ColumnInfo(name = "noclear")
+    public boolean noClear;
+
+    @Override
+    public String toString() {
+
+        return  "nid: "             + nid           + "\n" +
+                "notifPackage: "    + notifPackage  + "\n" +
+                "timestamp: "       + strTimestamp  + "\n" +
+                "appName: "         + appName       + "\n" +
+                "title: "           + title         + "\n" +
+                "text: "            + text          + "\n" +
+                "ongoing: "         + ongoing       + "\n" +
+                "noClear: "         + noClear       + "\n";
+    }
 }
