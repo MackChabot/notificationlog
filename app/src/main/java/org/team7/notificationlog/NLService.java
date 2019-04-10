@@ -6,9 +6,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Log;
 
@@ -43,7 +43,14 @@ public class NLService extends NotificationListenerService {
         Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
 
         Log.i(TAG, "Running insert task");
-        new InsertDbTask(getApplicationContext()).execute(getDbn(sbn));
+
+
+        boolean trackPersistent = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("trackPersistent", false);
+        boolean isOngoing = checkFlag(sbn.getNotification(), Notification.FLAG_ONGOING_EVENT);
+        boolean noClear = checkFlag(sbn.getNotification(), Notification.FLAG_NO_CLEAR);
+
+        if (trackPersistent || (!isOngoing && !noClear))
+            new InsertDbTask(getApplicationContext()).execute(getDbn(sbn));
 
 //        Intent i = new Intent("com.example.mynotificationtrackerapp.NOTIFICATION_LISTENER_EXAMPLE");
 //        i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
