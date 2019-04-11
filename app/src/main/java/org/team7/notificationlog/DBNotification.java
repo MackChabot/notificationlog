@@ -7,12 +7,13 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "notifications")
 public class DBNotification {
 
-    public DBNotification(String notifPackage, String strTimestamp, String appName, String title, String text, boolean ongoing, boolean noClear) {
+    public DBNotification(String notifPackage, String strTimestamp, String appName, String title, String text, String category, boolean ongoing, boolean noClear) {
         this.notifPackage = notifPackage;
         this.strTimestamp = strTimestamp;
         this.appName = appName;
         this.title = title;
         this.text = text;
+        this.category = (category == null) ? "noncategorized" : category;
         this.ongoing = ongoing;
         this.noClear = noClear;
     }
@@ -35,6 +36,9 @@ public class DBNotification {
     @ColumnInfo(name = "notiftext")
     public String text;
 
+    @ColumnInfo(name = "category")
+    public String category;
+
     @ColumnInfo(name = "ongoing")
     public boolean ongoing;
 
@@ -50,7 +54,9 @@ public class DBNotification {
                 "appName: "         + appName       + "\n" +
                 "title: "           + title         + "\n" +
                 "text: "            + text          + "\n" +
+                "category: "        + category      + "\n" +
                 "ongoing: "         + ongoing       + "\n" +
                 "noClear: "         + noClear       + "\n";
+
     }
 }

@@ -3,6 +3,7 @@ package org.team7.notificationlog;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.service.notification.StatusBarNotification;
 import android.text.SpannableString;
 import android.util.Log;
 
+import java.util.HashMap;
+
 public class NLService extends NotificationListenerService {
     // true if application is open. False if is just the service that's running
     // TODO probably replace this variable with a broadcast receiver
@@ -19,70 +22,31 @@ public class NLService extends NotificationListenerService {
 
     private String TAG = this.getClass().getSimpleName();
 
-    //    private NLServiceReceiver nlservicereciever;
     @Override
     public void onCreate() {
         super.onCreate();
-
-//        nlservicereciever = new NLServiceReceiver();
-//        IntentFilter filter = new IntentFilter();
-//        filter.addAction("com.example.mynotificationtrackerapp.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
-//        registerReceiver(nlservicereciever, filter);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        unregisterReceiver(nlservicereciever);
     }
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
 
         Log.i(TAG,"**********  onNotificationPosted");
-        Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
-
+        Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName() + "\tcat: " + sbn.getNotification().category);
         Log.i(TAG, "Running insert task");
-
 
         boolean trackPersistent = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("trackPersistent", false);
         boolean isOngoing = checkFlag(sbn.getNotification(), Notification.FLAG_ONGOING_EVENT);
         boolean noClear = checkFlag(sbn.getNotification(), Notification.FLAG_NO_CLEAR);
+        boolean validCategory = checkValidCategory(sbn.getNotification());
 
-        if (trackPersistent || (!isOngoing && !noClear))
+        if ( validCategory && (trackPersistent || (!isOngoing && !noClear)) )
             new InsertDbTask(getApplicationContext()).execute(getDbn(sbn));
-
-//        Intent i = new Intent("com.example.mynotificationtrackerapp.NOTIFICATION_LISTENER_EXAMPLE");
-//        i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
-//        sendBroadcast(i);
     }
-
-//    class NLServiceReceiver extends BroadcastReceiver {
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            if(intent.getStringExtra("command").equals("clearall")){
-//                NLService.this.cancelAllNotifications();
-//            }
-//            else if(intent.getStringExtra("command").equals("list")){
-//                Intent i1 = new  Intent("com.example.mynotificationtrackerapp.NOTIFICATION_LISTENER_EXAMPLE");
-//                i1.putExtra("notification_event","=====================");
-//                sendBroadcast(i1);
-//                int i=1;
-//                for (StatusBarNotification sbn : NLService.this.getActiveNotifications()) {
-//                    Intent i2 = new  Intent("com.example.mynotificationtrackerapp.NOTIFICATION_LISTENER_EXAMPLE");
-//                    i2.putExtra("notification_event",i +" " + sbn.getPackageName() + "\n");
-//                    sendBroadcast(i2);
-//                    i++;
-//                }
-//                Intent i3 = new  Intent("com.example.mynotificationtrackerapp.NOTIFICATION_LISTENER_EXAMPLE");
-//                i3.putExtra("notification_event","===== Notification List ====");
-//                sendBroadcast(i3);
-//
-//            }
-//
-//        }
-//    }
 
     private DBNotification getDbn(StatusBarNotification sbn) {
         Bundle extra = sbn.getNotification().extras;
@@ -116,6 +80,7 @@ public class NLService extends NotificationListenerService {
                 getAppName(sbn.getPackageName()),
                 title,
                 text,
+                sbn.getNotification().category,
                 isOngoing,
                 noClear);
     }
@@ -123,6 +88,34 @@ public class NLService extends NotificationListenerService {
     private boolean checkFlag(Notification n, int flag) {
         return (n.flags & flag) == flag;
     }
+
+    private boolean checkValidCategory(Notification n) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        HashMap<String, String> categories = new HashMap<>();
+
+        categories.put(null, "catNoCat");
+        categories.put(Notification.CATEGORY_ALARM, "catAlarm");
+        categories.put(Notification.CATEGORY_ERROR, "carErr");
+        categories.put(Notification.CATEGORY_PROGRESS, "catProgress");
+        categories.put(Notification.CATEGORY_SERVICE, "catService");
+        categories.put(Notification.CATEGORY_EVENT, "catEvent");
+        categories.put(Notification.CATEGORY_SYSTEM, "catSys");
+        categories.put(Notification.CATEGORY_EMAIL, "catEmail");
+        categories.put(Notification.CATEGORY_TRANSPORT, "catTransport");
+        categories.put(Notification.CATEGORY_MESSAGE, "catMsg");
+        // Navigation is hardcoded for compatibility with API 23 (our min API). If not hardcoded, it doesn't build.
+        // With it, it just don't work. However, it won't work either way so it's fine
+        categories.put("navigation", "catNavigation");
+        categories.put(Notification.CATEGORY_CALL, "catCall");
+        categories.put(Notification.CATEGORY_PROMO, "catPromo");
+        categories.put(Notification.CATEGORY_RECOMMENDATION, "catRecommendation");
+        categories.put(Notification.CATEGORY_REMINDER, "catReminder");
+        categories.put(Notification.CATEGORY_SOCIAL,"catSocial");
+
+        return sp.getBoolean(categories.get(n.category), true);
+    }
+
 
     private String getAppName(String packageName) {
 
