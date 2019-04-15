@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="Categories">
+
+    <!-- TODO this somehow needs a toolbar. I have no idea what I'm doing. Also hardcoded strings are bad-->
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="catNoCat"
+        android:title="[No Category]" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="catAlarm"
+        android:title="Alarms" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="catErr"
+        android:title="Background/Authentication Errors" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="catProgress"
+        android:title="Background Progress" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="catService"
+        android:title="Background Services" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="catEvent"
+        android:title="Calendar Events" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="catSys"
+        android:title="Device Status Updates" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="catEmail"
+        android:title="Emails" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="catTransport"
+        android:title="Media Playback" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="catMsg"
+        android:title="Messages" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="catNavigation"
+        android:title="Navigation" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="catCall"
+        android:title="Phone Calls" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="catPromo"
+        android:title="Promotions/Advertisements" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="catRecommendation"
+        android:title="Recommendations" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="catReminder"
+        android:title="Reminders" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="catSocial"
+        android:title="Social Media" />
+
+</PreferenceScreen>
