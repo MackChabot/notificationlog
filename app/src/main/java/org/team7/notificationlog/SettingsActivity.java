@@ -1,10 +1,10 @@
 package org.team7.notificationlog;
 
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NavUtils;
 
 public class SettingsActivity extends AppCompatActivity implements SettingsActivityFragment.Callback {
 
@@ -29,10 +29,21 @@ public class SettingsActivity extends AppCompatActivity implements SettingsActiv
     }
 
     @Override
-    public void onBackPressed() {
-        // this if statement is necessary to navigate through nested and main fragments
+    public boolean onSupportNavigateUp() {
+        // this if statement is necessary to navigate through nested and main fragments with the toolbar back arrow
         if (getFragmentManager().getBackStackEntryCount() == 0) {
-            super.onBackPressed();
+            super.onSupportNavigateUp();
+        } else {
+            getFragmentManager().popBackStack();
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        // this if statement is necessary to navigate through nested and main fragments with the back button
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            NavUtils.navigateUpFromSameTask(this);
         } else {
             getFragmentManager().popBackStack();
         }
