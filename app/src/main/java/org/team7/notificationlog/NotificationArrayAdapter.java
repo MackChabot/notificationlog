@@ -1,8 +1,8 @@
 package org.team7.notificationlog;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -13,6 +13,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.team7.notificationlog.db.DBNotification;
+import org.team7.notificationlog.db.PersistentParcelLoader;
 
 import java.text.DateFormat;
 import java.util.Comparator;
@@ -33,20 +36,6 @@ public class NotificationArrayAdapter extends ArrayAdapter<DBNotification> {
 
     Fragment maf;
     List<DBNotification> dbns;
-
-    private AdapterView.OnItemClickListener itemClickedHandler = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            DBNotification dbn = getItem(position);
-            if (dbn == null)
-                return;
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Debug Notif");
-            builder.setMessage(dbn.toString());
-        }
-    };
 
     // constructor to initialize superclass inherited members
     public NotificationArrayAdapter(Fragment fragment, Context context, List<DBNotification> notifications) {

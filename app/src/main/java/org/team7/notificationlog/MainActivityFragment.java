@@ -2,12 +2,19 @@
 // Fragment in which the DoodleView is displayed
 package org.team7.notificationlog;
 
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import org.team7.notificationlog.db.DBNotification;
+import org.team7.notificationlog.db.PersistentParcelLoader;
 
 import java.util.List;
 
@@ -43,6 +50,23 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onChanged(List<DBNotification> dbNotifications) {
                 notificationArrayAdapter.setNotifData(dbNotifications);
+            }
+        });
+
+        notificationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                DBNotification dbn = (DBNotification) parent.getItemAtPosition(position);
+                if (dbn == null)
+                    return;
+
+                PendingIntent pi = PersistentParcelLoader.loadPendingIntent(getContext(), dbn.notifPackage, dbn.strTimestamp);
+                try {
+                    pi.send();
+                } catch (PendingIntent.CanceledException e) {
+                    Log.e("MainActivityFragment", "Intent was canceled", e);
+                }
             }
         });
 

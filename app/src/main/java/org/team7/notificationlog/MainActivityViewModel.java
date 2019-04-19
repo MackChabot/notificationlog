@@ -8,6 +8,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
+import org.team7.notificationlog.db.DBNotification;
+import org.team7.notificationlog.db.NotificationDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;

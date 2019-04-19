@@ -2,6 +2,7 @@ package org.team7.notificationlog;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -12,6 +13,10 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.text.SpannableString;
 import android.util.Log;
+
+import org.team7.notificationlog.db.DBNotification;
+import org.team7.notificationlog.db.NotificationDatabase;
+import org.team7.notificationlog.db.PersistentParcelLoader;
 
 import java.util.HashMap;
 
@@ -44,8 +49,16 @@ public class NLService extends NotificationListenerService {
         boolean noClear = checkFlag(sbn.getNotification(), Notification.FLAG_NO_CLEAR);
         boolean validCategory = checkValidCategory(sbn.getNotification());
 
-        if ( validCategory && (trackPersistent || (!isOngoing && !noClear)) )
-            new InsertDbTask(getApplicationContext()).execute(getDbn(sbn));
+
+
+        if ( validCategory && (trackPersistent || (!isOngoing && !noClear)) ) {
+            DBNotification dbn = getDbn(sbn);
+            new InsertDbTask(getApplicationContext()).execute(dbn);
+
+            PendingIntent pi = sbn.getNotification().contentIntent;
+            if (pi != null)
+                PersistentParcelLoader.savePendingIntent(getApplicationContext(), dbn.notifPackage, dbn.strTimestamp, pi);
+        }
     }
 
     private DBNotification getDbn(StatusBarNotification sbn) {
@@ -115,7 +128,6 @@ public class NLService extends NotificationListenerService {
 
         return sp.getBoolean(categories.get(n.category), true);
     }
-
 
     private String getAppName(String packageName) {
 

@@ -1,4 +1,4 @@
-package org.team7.notificationlog;
+package org.team7.notificationlog.db;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
