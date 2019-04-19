@@ -6,22 +6,19 @@
     <SwitchPreference
         android:defaultValue="true"
         android:key="catNoCat"
-        android:title="[No Category]" />
+        android:title="[No Category]"
+        android:summary="Notifications that have not been given a specific category"/>
 
     <SwitchPreference
         android:defaultValue="false"
         android:key="catAlarm"
-        android:title="Alarms" />
-
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="catErr"
-        android:title="Background/Authentication Errors" />
+        android:title="Alarms"/>
 
     <SwitchPreference
         android:defaultValue="false"
         android:key="catProgress"
-        android:title="Background Progress" />
+        android:title="Background Progress"
+        android:summary="Progress of long-running background operations"/>
 
     <SwitchPreference
         android:defaultValue="false"
@@ -45,18 +42,27 @@
 
     <SwitchPreference
         android:defaultValue="false"
+        android:key="catErr"
+        android:title="Errors"
+        android:summary="Background errors or authentication status"/>
+
+    <SwitchPreference
+        android:defaultValue="false"
         android:key="catTransport"
-        android:title="Media Playback" />
+        android:title="Media Playback"
+        android:summary="Media notifications that are ongoing and give play/pause/etc controls."/>
 
     <SwitchPreference
         android:defaultValue="true"
         android:key="catMsg"
-        android:title="Messages" />
+        android:title="Messages"
+        android:summary="Incoming direct message (SMS, instant message, etc.)"/>
 
     <SwitchPreference
         android:defaultValue="false"
         android:key="catNavigation"
-        android:title="Navigation" />
+        android:title="Navigation"
+        android:summary="Map turn-by-turn navigation"/>
 
     <SwitchPreference
         android:defaultValue="true"
@@ -71,7 +77,8 @@
     <SwitchPreference
         android:defaultValue="true"
         android:key="catRecommendation"
-        android:title="Recommendations" />
+        android:title="Recommendations"
+        android:summary="Specific recommendations from an app, such as a news article."/>
 
     <SwitchPreference
         android:defaultValue="true"

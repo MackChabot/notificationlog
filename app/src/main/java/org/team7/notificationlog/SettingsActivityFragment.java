@@ -10,7 +10,7 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
     private Callback mCallback;
 
     private static final String KEY_1 = "CATEGORIES";
-    private static final String KEY_2 = "NESTED_KEY2";
+    private static final String KEY_2 = "APPS";
 
     @Override
     public void onAttach(Activity activity) {
@@ -33,8 +33,8 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
         Preference preference = findPreference(KEY_1);
         preference.setOnPreferenceClickListener(this);
 
-//        preference = findPreference(KEY_2);
-//        preference.setOnPreferenceClickListener(this);
+        preference = findPreference(KEY_2);
+        preference.setOnPreferenceClickListener(this);
     }
 
     @Override
