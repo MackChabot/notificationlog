@@ -2,6 +2,8 @@
 // Fragment in which the DoodleView is displayed
 package org.team7.notificationlog;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +45,20 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onChanged(List<DBNotification> dbNotifications) {
                 notificationArrayAdapter.setNotifData(dbNotifications);
+            }
+        });
+
+        notificationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                DBNotification dbn = (DBNotification) parent.getItemAtPosition(position);
+
+                PackageManager pm = getContext().getPackageManager();
+                Intent i = pm.getLaunchIntentForPackage(dbn.notifPackage);
+
+                if (i != null)
+                    startActivity(i);
             }
         });
 
