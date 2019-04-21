@@ -5,6 +5,7 @@ import android.app.Application;
 import android.app.Notification;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
@@ -80,6 +81,28 @@ public class MainActivityViewModel extends AndroidViewModel {
 
         return cats;
     }
+
+    public static ArrayList<String> getValidApps(Context c){
+        ArrayList<String> apps = new ArrayList<>();
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+
+        //get a list of installed apps
+        List<PackageInfo> packs = c.getPackageManager().getInstalledPackages(0);
+        for (PackageInfo p: packs)
+            if (NestedPreferenceFragment.notExcludedApp(p,c) && sp.getBoolean(p.packageName,true))
+                 apps.add(p.packageName);
+
+//        List<PackageInfo> packs = pm.getInstalledPackages(0);
+//        for (int i = 0; i < packs.size(); i++) {
+//            PackageInfo p = packs.get(i);
+//            if (NestedPreferenceFragment.notExcludedApp(p,c))
+//                if (sp.getBoolean(p.packageName,true))
+//                    apps.add(p.packageName);
+//        }
+
+        return apps;
+    }
 }
 
 class GetAllTask extends AsyncTask<Void, Void, List<DBNotification>> {
@@ -94,7 +117,7 @@ class GetAllTask extends AsyncTask<Void, Void, List<DBNotification>> {
 
     @Override
     protected List<DBNotification> doInBackground(Void... voids) {
-        return NotificationDatabase.getDatabase(c).dbNotificationDao().getAll(MainActivityViewModel.getValidCategories(c));
+        return NotificationDatabase.getDatabase(c).dbNotificationDao().getAll(MainActivityViewModel.getValidCategories(c),MainActivityViewModel.getValidApps(c));
     }
 }
 
@@ -110,7 +133,7 @@ class GetAllLiveTask extends AsyncTask<Void, Void, LiveData<List<DBNotification>
 
     @Override
     protected LiveData<List<DBNotification>> doInBackground(Void... voids) {
-        return NotificationDatabase.getDatabase(c).dbNotificationDao().getAllLive(MainActivityViewModel.getValidCategories(c));
+        return NotificationDatabase.getDatabase(c).dbNotificationDao().getAllLive(MainActivityViewModel.getValidCategories(c), MainActivityViewModel.getValidApps(c));
     }
 }
 
@@ -126,6 +149,6 @@ class GetAllNonPersistentLiveTask extends AsyncTask<Void, Void, LiveData<List<DB
 
     @Override
     protected LiveData<List<DBNotification>> doInBackground(Void... voids) {
-        return NotificationDatabase.getDatabase(c).dbNotificationDao().getAllNonPersistentLive(MainActivityViewModel.getValidCategories(c));
+        return NotificationDatabase.getDatabase(c).dbNotificationDao().getAllNonPersistentLive(MainActivityViewModel.getValidCategories(c), MainActivityViewModel.getValidApps(c));
     }
 }
