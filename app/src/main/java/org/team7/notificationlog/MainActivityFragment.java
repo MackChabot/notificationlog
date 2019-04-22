@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 public class MainActivityFragment extends Fragment {
     public static NotificationArrayAdapter notificationArrayAdapter;
+    public static MainActivityViewModel mvm;
 
     // called when Fragment's view needs to be created
     @Override
@@ -31,8 +32,8 @@ public class MainActivityFragment extends Fragment {
 
         NLService.application_running = true;
 
-        MainActivityViewModel mvm = ViewModelProviders.of(this).get(MainActivityViewModel.class);
-        // List of StatusBarNotification objects representing the forecast
+        mvm = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        // List of StatusBarNotification objects representing the forecast TODO forecast?!?!?
         List<DBNotification> notificationList = mvm.getNotificationsBase();
 
         // displays notification info

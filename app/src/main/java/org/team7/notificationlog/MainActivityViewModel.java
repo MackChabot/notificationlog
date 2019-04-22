@@ -30,6 +30,15 @@ public class MainActivityViewModel extends AndroidViewModel {
         return notifData;
     }
 
+    public List<String> getPackages(Context c) {
+        try {
+            return new GetAllPackagesTask(getApplication().getApplicationContext()).execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return new ArrayList<String>();
+        }
+    }
+
     public List<DBNotification> getNotificationsBase() {
 
         try {
@@ -90,7 +99,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         //get a list of installed apps
         List<PackageInfo> packs = c.getPackageManager().getInstalledPackages(0);
         for (PackageInfo p: packs)
-            if (NestedPreferenceFragment.notExcludedApp(p,c) && sp.getBoolean(p.packageName,true))
+            if (sp.getBoolean(p.packageName,true))
                  apps.add(p.packageName);
 
 //        List<PackageInfo> packs = pm.getInstalledPackages(0);
@@ -150,5 +159,21 @@ class GetAllNonPersistentLiveTask extends AsyncTask<Void, Void, LiveData<List<DB
     @Override
     protected LiveData<List<DBNotification>> doInBackground(Void... voids) {
         return NotificationDatabase.getDatabase(c).dbNotificationDao().getAllNonPersistentLive(MainActivityViewModel.getValidCategories(c), MainActivityViewModel.getValidApps(c));
+    }
+}
+
+class GetAllPackagesTask extends AsyncTask<Void, Void, List<String>> {
+
+    // The only way to do this afaik
+    @SuppressLint("StaticFieldLeak")
+    private Context c;
+
+    public GetAllPackagesTask(Context context) {
+        c = context;
+    }
+
+    @Override
+    protected List<String> doInBackground(Void... voids) {
+        return NotificationDatabase.getDatabase(c).dbNotificationDao().getAllPackages();
     }
 }

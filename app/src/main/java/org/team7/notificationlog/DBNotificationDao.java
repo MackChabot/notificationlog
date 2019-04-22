@@ -11,6 +11,9 @@ import androidx.room.Query;
 @Dao
 public interface DBNotificationDao {
 
+    @Query("SELECT DISTINCT package FROM notifications")
+    List<String> getAllPackages();
+
     @Query("SELECT * FROM notifications WHERE category IN (:validCategories) AND package IN (:validApps)")
     LiveData<List<DBNotification>> getAllLive(List<String> validCategories, List<String> validApps);
 
