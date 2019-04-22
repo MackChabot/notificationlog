@@ -14,6 +14,7 @@ import android.widget.ListView;
 import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -26,7 +27,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        final View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         setHasOptionsMenu(true); // this fragment has menu items to display
 
@@ -37,7 +38,7 @@ public class MainActivityFragment extends Fragment {
         List<DBNotification> notificationList = mvm.getNotificationsBase();
 
         // displays notification info
-        ListView notificationListView = view.findViewById(R.id.notificationListView);
+        final ListView notificationListView = view.findViewById(R.id.notificationListView);
         notificationArrayAdapter = new NotificationArrayAdapter(this, getActivity().getApplicationContext(), notificationList);
         notificationListView.setAdapter(notificationArrayAdapter);
 
@@ -46,6 +47,15 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onChanged(List<DBNotification> dbNotifications) {
                 notificationArrayAdapter.setNotifData(dbNotifications);
+            }
+        });
+
+        Toolbar appBar = view.findViewById(R.id.toolbar);
+
+        appBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notificationListView.setSelection(0);
             }
         });
 
