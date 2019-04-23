@@ -3,7 +3,6 @@ package org.team7.notificationlog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -32,31 +31,31 @@ public class MainActivity extends AppCompatActivity {
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        PreferenceManager.getDefaultSharedPreferences(this)
-            .registerOnSharedPreferenceChangeListener(
-                    new SharedPreferences.OnSharedPreferenceChangeListener() {
-                        @Override
-                        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                            preferencesChanged = true;
-
-                            if (key.equals("trackPersistent")) {
-                                boolean trackPersistent = sharedPreferences.getBoolean("trackPersistent", false);
-
-                                // TODO Are we using this for anything?
-
-        //                        if (regions != null & regions.size() > 0) {
-        //                            pkmnFragment.updateRegions(sharedPreferences);
-        //                            pkmnFragment.reset();
-        //                        } else {
-        //                            SharedPreferences.Editor editor = sharedPreferences.edit();
-        //                            regions.add(getString(R.string.region_default));
-        //                            editor.putStringSet(REGIONS, regions);
-        //                            editor.apply();
-        //                        }
-                            }
-                            //Toast.makeText(MainActivity.this, getString(R.string.quiz_restart), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+//        PreferenceManager.getDefaultSharedPreferences(this)
+//            .registerOnSharedPreferenceChangeListener(
+//                    new SharedPreferences.OnSharedPreferenceChangeListener() {
+//                        @Override
+//                        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+//                            preferencesChanged = true;
+//
+//                            if (key.equals("trackPersistent")) {
+//                                boolean trackPersistent = sharedPreferences.getBoolean("trackPersistent", false);
+//
+//                                // TODO Are we using this for anything?
+//
+//        //                        if (regions != null & regions.size() > 0) {
+//        //                            pkmnFragment.updateRegions(sharedPreferences);
+//        //                            pkmnFragment.reset();
+//        //                        } else {
+//        //                            SharedPreferences.Editor editor = sharedPreferences.edit();
+//        //                            regions.add(getString(R.string.region_default));
+//        //                            editor.putStringSet(REGIONS, regions);
+//        //                            editor.apply();
+//        //                        }
+//                            }
+//                            //Toast.makeText(MainActivity.this, getString(R.string.quiz_restart), Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
     }
 
     @Override
