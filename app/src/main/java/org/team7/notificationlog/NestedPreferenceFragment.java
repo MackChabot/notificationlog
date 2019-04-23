@@ -1,12 +1,14 @@
 package org.team7.notificationlog;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
-import android.preference.SwitchPreference;
+import android.view.View;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +22,7 @@ public class NestedPreferenceFragment extends PreferenceFragment {
 
     private static final String TAG_KEY = "NESTED_KEY";
 
-    private static List<SwitchPreference> validAppPreferences = new ArrayList<>();
+    private static List<ExtendedSwitchPreference> validAppPreferences = new ArrayList<>();
 
     public static NestedPreferenceFragment newInstance(int key) {
         NestedPreferenceFragment fragment = new NestedPreferenceFragment();
@@ -61,7 +63,7 @@ public class NestedPreferenceFragment extends PreferenceFragment {
         for (PackageInfo p: packs) {
             if (showAllApps || validPackages.contains(p.packageName)) {
                 // TODO AppList not used currently, but could be used if adding images later
-                SwitchPreference pref = new SwitchPreference(c);
+                ExtendedSwitchPreference pref = new ExtendedSwitchPreference(c);
                 pref.setKey(p.packageName);
                 pref.setSummary(p.packageName); //TODO for debugging
                 pref.setTitle(p.applicationInfo.loadLabel(pm).toString());
@@ -83,9 +85,20 @@ public class NestedPreferenceFragment extends PreferenceFragment {
                 PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(getActivity());
                 setPreferenceScreen(screen);
 
-                for (SwitchPreference pref: validAppPreferences)
-                    screen.addPreference(pref);
+                for (ExtendedSwitchPreference pref: validAppPreferences) {
 
+                    pref.setSwitchClickListener(new ExtendedSwitchPreference.ExtendedSwitchListener() {
+                        @Override
+                        public void onCheckedChanged(Switch buttonView, boolean isChecked) {}
+
+                        @Override
+                        public void onClick(View view) {
+                            startActivity(new Intent(getContext(), AppListActivity.class));
+                        }
+                    });
+
+                    screen.addPreference(pref);
+                }
 
                 break;
         }
