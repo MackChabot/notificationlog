@@ -38,7 +38,7 @@ public class NestedPreferenceFragment extends PreferenceFragment {
 
         super.onCreate(savedInstanceState);
 
-        updateValidAppPreferences(this.getContext(), true);
+        updateValidAppPreferences(this.getContext(), false);
         checkPreferenceResource();
     }
 
@@ -57,6 +57,8 @@ public class NestedPreferenceFragment extends PreferenceFragment {
         });
 
         List<String> validPackages = MainActivityFragment.mvm.getPackages(c);
+
+        validAppPreferences.clear();
 
         for (PackageInfo p: packs) {
             if (showAllApps || validPackages.contains(p.packageName)) {
