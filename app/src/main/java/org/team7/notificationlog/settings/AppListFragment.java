@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import android.app.Fragment;
 
 import org.team7.notificationlog.R;

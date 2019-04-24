@@ -1,8 +1,8 @@
-// MainActivityFragment.java
-// Fragment in which the DoodleView is displayed
 package org.team7.notificationlog.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -75,7 +75,7 @@ public class MainActivityFragment extends Fragment {
         final Spinner sort = view.findViewById(R.id.sortSpinner);
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         String pref = sharedPref.getString(getString(R.string.sortKey), "Time");
-        switch(pref){
+        switch (pref) {
             case "App":
                 sort.setSelection(0);
                 break;
@@ -89,10 +89,10 @@ public class MainActivityFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 SharedPreferences sharedPref = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(getString(R.string.sortKey), (String)sort.getSelectedItem());
+                editor.putString(getString(R.string.sortKey), (String) sort.getSelectedItem());
                 editor.apply();
 
-                switch((String)sort.getSelectedItem()){
+                switch ((String) sort.getSelectedItem()) {
                     case "App":
                         Collections.sort(notificationList, new Comparator<DBNotification>() {
                             @Override
@@ -119,7 +119,8 @@ public class MainActivityFragment extends Fragment {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parentView) {}
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
 
         });
 

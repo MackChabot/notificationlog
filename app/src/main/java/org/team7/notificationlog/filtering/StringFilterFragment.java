@@ -62,7 +62,8 @@ public class StringFilterFragment extends Fragment implements StringFilterDialog
         List<StringFilter> initFilters = new ArrayList<>();
         try {
             initFilters = new GetFiltersNonLiveTask(getContext(), pkg).execute().get();
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
 
         final ListView filterListView = v.findViewById(R.id.filtersList);
         final StringFilterAdapter sfAdapter = new StringFilterAdapter(getContext(), initFilters);
@@ -75,7 +76,8 @@ public class StringFilterFragment extends Fragment implements StringFilterDialog
                     sfAdapter.setFilterData(stringFilters);
                 }
             });
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
 
         final StringFilterDialog.StringFilterDialogCallback callback = this;
 

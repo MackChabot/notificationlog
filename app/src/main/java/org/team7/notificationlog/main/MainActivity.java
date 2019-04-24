@@ -34,41 +34,15 @@ public class MainActivity extends AppCompatActivity {
             buildNotificationServiceAlertDialog().show();
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-//        PreferenceManager.getDefaultSharedPreferences(this)
-//            .registerOnSharedPreferenceChangeListener(
-//                    new SharedPreferences.OnSharedPreferenceChangeListener() {
-//                        @Override
-//                        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//                            preferencesChanged = true;
-//
-//                            if (key.equals("trackPersistent")) {
-//                                boolean trackPersistent = sharedPreferences.getBoolean("trackPersistent", false);
-//
-//                                // TODO Are we using this for anything?
-//
-//        //                        if (regions != null & regions.size() > 0) {
-//        //                            pkmnFragment.updateRegions(sharedPreferences);
-//        //                            pkmnFragment.reset();
-//        //                        } else {
-//        //                            SharedPreferences.Editor editor = sharedPreferences.edit();
-//        //                            regions.add(getString(R.string.region_default));
-//        //                            editor.putStringSet(REGIONS, regions);
-//        //                            editor.apply();
-//        //                        }
-//                            }
-//                            //Toast.makeText(MainActivity.this, getString(R.string.quiz_restart), Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
         NLService.application_running = false;
     }
 
-    private boolean isNotificationServiceEnabled(){
+    private boolean isNotificationServiceEnabled() {
         String pkgName = getPackageName();
         final String flat = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
         if (!TextUtils.isEmpty(flat)) {
@@ -83,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private AlertDialog buildNotificationServiceAlertDialog(){
+    private AlertDialog buildNotificationServiceAlertDialog() {
 
         final AlertDialog.Builder failedDialogBuilder = new AlertDialog.Builder(this);
         failedDialogBuilder.setTitle(R.string.app_name);
@@ -111,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                         failedDialogBuilder.create().show();
                     }
                 });
-        return(alertDialogBuilder.create());
+        return (alertDialogBuilder.create());
     }
 
     @Override
@@ -129,9 +103,9 @@ public class MainActivity extends AppCompatActivity {
                 confirmClear(); // confirm before erasing image
                 return true; // consume the menu event
             case R.id.settings:
-               Intent preferencesIntent = new Intent(this, SettingsActivity.class);
-               startActivity(preferencesIntent);
-               return true;
+                Intent preferencesIntent = new Intent(this, SettingsActivity.class);
+                startActivity(preferencesIntent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

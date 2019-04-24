@@ -39,8 +39,8 @@ public class NLService extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
 
-        Log.i(TAG,"**********  onNotificationPosted");
-        Log.i(TAG,"ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName() + "\tcat: " + sbn.getNotification().category);
+        Log.i(TAG, "**********  onNotificationPosted");
+        Log.i(TAG, "ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName() + "\tcat: " + sbn.getNotification().category);
         Log.i(TAG, "Running insert task");
 
         boolean trackPersistent = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("trackPersistent", false);
@@ -48,7 +48,7 @@ public class NLService extends NotificationListenerService {
         boolean noClear = checkFlag(sbn.getNotification(), Notification.FLAG_NO_CLEAR);
         boolean validCategory = checkValidCategory(sbn.getNotification());
 
-        if ( validCategory && (trackPersistent || (!isOngoing && !noClear)) )
+        if (validCategory && (trackPersistent || (!isOngoing && !noClear)))
             new InsertDbTask(getApplicationContext()).execute(getDbn(sbn));
     }
 
@@ -66,7 +66,8 @@ public class NLService extends NotificationListenerService {
                 SpannableString spannableTitle = (SpannableString) extra.get("android.title");
                 if (spannableTitle != null)
                     title = spannableTitle.toString();
-            } catch (ClassCastException ignore) {} // leave title null
+            } catch (ClassCastException ignore) {
+            } // leave title null
         }
 
         String text = "";
@@ -115,7 +116,7 @@ public class NLService extends NotificationListenerService {
         categories.put(Notification.CATEGORY_PROMO, "catPromo");
         categories.put(Notification.CATEGORY_RECOMMENDATION, "catRecommendation");
         categories.put(Notification.CATEGORY_REMINDER, "catReminder");
-        categories.put(Notification.CATEGORY_SOCIAL,"catSocial");
+        categories.put(Notification.CATEGORY_SOCIAL, "catSocial");
 
         return sp.getBoolean(categories.get(n.category), true);
     }

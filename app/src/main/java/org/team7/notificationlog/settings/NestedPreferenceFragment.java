@@ -46,7 +46,7 @@ public class NestedPreferenceFragment extends PreferenceFragment {
     }
 
     // TODO call this in the background or something before we have to load these so it doesn't lag the app
-    public static void updateValidAppPreferences(Context c, boolean showAllApps){
+    public static void updateValidAppPreferences(Context c, boolean showAllApps) {
 
         if (validAppPreferences.size() > 0)
             return;
@@ -65,7 +65,7 @@ public class NestedPreferenceFragment extends PreferenceFragment {
 
         List<String> validPackages = MainActivityFragment.mvm.getPackages(c);
 
-        for (PackageInfo p: packs) {
+        for (PackageInfo p : packs) {
             if (showAllApps || validPackages.contains(p.packageName)) {
                 // TODO AppList not used currently, but could be used if adding images later
                 ExtendedSwitchPreference pref = new ExtendedSwitchPreference(c);
@@ -90,11 +90,12 @@ public class NestedPreferenceFragment extends PreferenceFragment {
                 PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(getActivity());
                 setPreferenceScreen(screen);
 
-                for (final ExtendedSwitchPreference pref: validAppPreferences) {
+                for (final ExtendedSwitchPreference pref : validAppPreferences) {
 
                     pref.setSwitchClickListener(new ExtendedSwitchPreference.ExtendedSwitchListener() {
                         @Override
-                        public void onCheckedChanged(Switch buttonView, boolean isChecked) {}
+                        public void onCheckedChanged(Switch buttonView, boolean isChecked) {
+                        }
 
                         @Override
                         public void onClick(View view) {

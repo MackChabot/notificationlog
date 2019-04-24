@@ -69,44 +69,45 @@ public class MainActivityViewModel extends AndroidViewModel {
         }
     }
 
-    public static ArrayList<String> getValidCategories(Context c){
+    public static ArrayList<String> getValidCategories(Context c) {
         ArrayList<String> cats = new ArrayList<>();
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
 
-        if (sp.getBoolean("catNoCat",true)) cats.add("noncategorized");
+        if (sp.getBoolean("catNoCat", true)) cats.add("noncategorized");
 //        cats.add("noncategorized");
-        if (sp.getBoolean("catAlarm",true)) cats.add(Notification.CATEGORY_ALARM);
-        if (sp.getBoolean("carErr",true)) cats.add(Notification.CATEGORY_ERROR);
-        if (sp.getBoolean("catProgress",true)) cats.add(Notification.CATEGORY_PROGRESS);
-        if (sp.getBoolean("catService",true)) cats.add(Notification.CATEGORY_SERVICE);
-        if (sp.getBoolean("catEvent",true)) cats.add(Notification.CATEGORY_EVENT);
-        if (sp.getBoolean("catSys",true)) cats.add(Notification.CATEGORY_SYSTEM);
-        if (sp.getBoolean( "catEmail",true)) cats.add(Notification.CATEGORY_EMAIL);
-        if (sp.getBoolean("catTransport",true)) cats.add(Notification.CATEGORY_TRANSPORT);
-        if (sp.getBoolean( "catMsg",true)) cats.add(Notification.CATEGORY_MESSAGE);
+        if (sp.getBoolean("catAlarm", true)) cats.add(Notification.CATEGORY_ALARM);
+        if (sp.getBoolean("carErr", true)) cats.add(Notification.CATEGORY_ERROR);
+        if (sp.getBoolean("catProgress", true)) cats.add(Notification.CATEGORY_PROGRESS);
+        if (sp.getBoolean("catService", true)) cats.add(Notification.CATEGORY_SERVICE);
+        if (sp.getBoolean("catEvent", true)) cats.add(Notification.CATEGORY_EVENT);
+        if (sp.getBoolean("catSys", true)) cats.add(Notification.CATEGORY_SYSTEM);
+        if (sp.getBoolean("catEmail", true)) cats.add(Notification.CATEGORY_EMAIL);
+        if (sp.getBoolean("catTransport", true)) cats.add(Notification.CATEGORY_TRANSPORT);
+        if (sp.getBoolean("catMsg", true)) cats.add(Notification.CATEGORY_MESSAGE);
         // Navigation is hardcoded for compatibility with API 23 (our min API). If not hardcoded, it doesn't build.
         // With it, it just don't work. However, it won't work either way so it's fine
-        if (sp.getBoolean("catNavigation",true)) cats.add("navigation");
-        if (sp.getBoolean("catCall",true)) cats.add(Notification.CATEGORY_CALL);
-        if (sp.getBoolean("catPromo",true)) cats.add(Notification.CATEGORY_PROMO);
-        if (sp.getBoolean("catRecommendation",true)) cats.add(Notification.CATEGORY_RECOMMENDATION);
-        if (sp.getBoolean( "catReminder",true)) cats.add(Notification.CATEGORY_REMINDER);
-        if (sp.getBoolean("catSocial",true)) cats.add(Notification.CATEGORY_SOCIAL);
+        if (sp.getBoolean("catNavigation", true)) cats.add("navigation");
+        if (sp.getBoolean("catCall", true)) cats.add(Notification.CATEGORY_CALL);
+        if (sp.getBoolean("catPromo", true)) cats.add(Notification.CATEGORY_PROMO);
+        if (sp.getBoolean("catRecommendation", true))
+            cats.add(Notification.CATEGORY_RECOMMENDATION);
+        if (sp.getBoolean("catReminder", true)) cats.add(Notification.CATEGORY_REMINDER);
+        if (sp.getBoolean("catSocial", true)) cats.add(Notification.CATEGORY_SOCIAL);
 
         return cats;
     }
 
-    public static ArrayList<String> getValidApps(Context c){
+    public static ArrayList<String> getValidApps(Context c) {
         ArrayList<String> apps = new ArrayList<>();
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
 
         //get a list of installed apps
         List<PackageInfo> packs = c.getPackageManager().getInstalledPackages(0);
-        for (PackageInfo p: packs)
-            if (sp.getBoolean(p.packageName,true))
-                 apps.add(p.packageName);
+        for (PackageInfo p : packs)
+            if (sp.getBoolean(p.packageName, true))
+                apps.add(p.packageName);
 
         return apps;
     }
@@ -118,7 +119,8 @@ public class MainActivityViewModel extends AndroidViewModel {
         List<StringFilter> allFilters = new ArrayList<>();
         try {
             allFilters = new GetAllFiltersTask(c).execute().get();
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
 
         for (StringFilter sf : allFilters) {
 
@@ -167,7 +169,7 @@ class GetAllTask extends AsyncTask<Void, Void, List<DBNotification>> {
 
     @Override
     protected List<DBNotification> doInBackground(Void... voids) {
-        return NotificationDatabase.getDatabase(c).dbNotificationDao().getAll(MainActivityViewModel.getValidCategories(c),MainActivityViewModel.getValidApps(c));
+        return NotificationDatabase.getDatabase(c).dbNotificationDao().getAll(MainActivityViewModel.getValidCategories(c), MainActivityViewModel.getValidApps(c));
     }
 }
 

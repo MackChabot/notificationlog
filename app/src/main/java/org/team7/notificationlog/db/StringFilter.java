@@ -1,22 +1,14 @@
 package org.team7.notificationlog.db;
 
 import androidx.room.ColumnInfo;
-import androidx.room.Delete;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "filters")
 public class StringFilter {
 
-    public enum FilterTarget {
-        TITLE, TEXT
+    public StringFilter() {
     }
-
-    public enum FilterType {
-        MATCH, CONTAINS
-    }
-
-    public StringFilter() {}
 
     public StringFilter(String appPackage, String target, String type, String filterText) {
         this.appPackage = appPackage;

@@ -19,6 +19,7 @@ public abstract class NotificationDatabase extends RoomDatabase {
     private static String DBNAME = "main";
 
     private static NotificationDatabase INSTANCE;
+
     public static NotificationDatabase getDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context, NotificationDatabase.class, DBNAME)

@@ -48,15 +48,15 @@ public class DBNotification {
     @Override
     public String toString() {
 
-        return  "nid: "             + nid           + "\n" +
-                "notifPackage: "    + notifPackage  + "\n" +
-                "timestamp: "       + strTimestamp  + "\n" +
-                "appName: "         + appName       + "\n" +
-                "title: "           + title         + "\n" +
-                "text: "            + text          + "\n" +
-                "category: "        + category      + "\n" +
-                "ongoing: "         + ongoing       + "\n" +
-                "noClear: "         + noClear       + "\n";
+        return "nid: " + nid + "\n" +
+                "notifPackage: " + notifPackage + "\n" +
+                "timestamp: " + strTimestamp + "\n" +
+                "appName: " + appName + "\n" +
+                "title: " + title + "\n" +
+                "text: " + text + "\n" +
+                "category: " + category + "\n" +
+                "ongoing: " + ongoing + "\n" +
+                "noClear: " + noClear + "\n";
 
     }
 }

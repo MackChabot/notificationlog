@@ -23,10 +23,6 @@ public class StringFilterDialog extends DialogFragment {
 
     public StringFilterDialogCallback listener;
 
-//    Spinner targetSpinner;
-//    Spinner typeSpinner;
-//    EditText editText;
-
     public static StringFilterDialog newInstance(StringFilterDialogCallback listener) {
         StringFilterDialog instance = new StringFilterDialog();
         instance.listener = listener;

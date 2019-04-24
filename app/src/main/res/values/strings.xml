@@ -14,10 +14,7 @@
     <string name="filter_format">Exclude notifications that %s \"%s\" in the %s portion.</string>
     <string name="sortKey">sortKey</string>
     <string name="delete_filter_message">Delete filter?</string>
-
-    <string name="filter_format">Exclude notifications that %s \"%s\" in the %s portion.</string>
     <string name="delete_filter_title">Delete</string>
-    <string name="delete_filter_message">Delete filter?</string>
 
     <string-array name="content_options">
         <item>Title</item>

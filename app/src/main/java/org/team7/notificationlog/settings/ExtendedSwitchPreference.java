@@ -14,11 +14,13 @@ public class ExtendedSwitchPreference extends SwitchPreference {
 
     /**
      * Sets listeners for the switch and the background container preference view cell
+     *
      * @param listener A valid ExtendedSwitchListener
      */
-    public void setSwitchClickListener(ExtendedSwitchListener listener){
+    public void setSwitchClickListener(ExtendedSwitchListener listener) {
         this.listener = listener;
     }
+
     private ExtendedSwitchListener listener = null;
 
     /**
@@ -27,16 +29,18 @@ public class ExtendedSwitchPreference extends SwitchPreference {
     public interface ExtendedSwitchListener {
         /**
          * Called when the switch is switched
+         *
          * @param buttonView
          * @param isChecked
          */
-        public void onCheckedChanged(Switch buttonView, boolean isChecked);
+        void onCheckedChanged(Switch buttonView, boolean isChecked);
 
         /**
          * Called when the preference view is clicked
+         *
          * @param view
          */
-        public void onClick(View view);
+        void onClick(View view);
     }
 
     public ExtendedSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -53,23 +57,24 @@ public class ExtendedSwitchPreference extends SwitchPreference {
 
     /**
      * Recursively go through view tree until we find an android.widget.Switch
+     *
      * @param view Root view to start searching
      * @return A Switch class or null
      */
-    private Switch findSwitchWidget(View view){
-        if (view instanceof  Switch){
-            return (Switch)view;
+    private Switch findSwitchWidget(View view) {
+        if (view instanceof Switch) {
+            return (Switch) view;
         }
-        if (view instanceof ViewGroup){
-            ViewGroup viewGroup = (ViewGroup)view;
-            for (int i = 0; i < viewGroup.getChildCount();i++){
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
                 View child = viewGroup.getChildAt(i);
-                if (child instanceof ViewGroup){
+                if (child instanceof ViewGroup) {
                     Switch result = findSwitchWidget(child);
-                    if (result!=null) return result;
+                    if (result != null) return result;
                 }
-                if (child instanceof Switch){
-                    return (Switch)child;
+                if (child instanceof Switch) {
+                    return (Switch) child;
                 }
             }
         }
@@ -78,19 +83,19 @@ public class ExtendedSwitchPreference extends SwitchPreference {
 
     //Get a handle on the 2 parts of the switch preference and assign handlers to them
     @Override
-    protected void onBindView (View view){
+    protected void onBindView(View view) {
         super.onBindView(view);
 
         final Switch switchView = findSwitchWidget(view);
-        if (switchView!=null){
+        if (switchView != null) {
             switchView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (listener != null)
-                        listener.onCheckedChanged((Switch) v, ((Switch)v).isChecked());
+                        listener.onCheckedChanged((Switch) v, ((Switch) v).isChecked());
                 }
             });
-            switchView.setChecked(getSharedPreferences().getBoolean(getKey(),false));
+            switchView.setChecked(getSharedPreferences().getBoolean(getKey(), false));
             switchView.setFocusable(true);
             switchView.setEnabled(true);
             //Set the thumb drawable here if you need to. Seems like this code makes it not respect thumb_drawable in the xml.
@@ -99,7 +104,7 @@ public class ExtendedSwitchPreference extends SwitchPreference {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listener!=null) listener.onClick(v);
+                if (listener != null) listener.onClick(v);
             }
         });
     }

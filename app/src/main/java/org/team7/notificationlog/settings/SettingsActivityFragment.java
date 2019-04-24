@@ -25,6 +25,7 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
             throw new IllegalStateException("Owner must implement Callback interface");
         }
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +55,6 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
     }
 
     public interface Callback {
-        public void onNestedPreferenceSelected(int key);
+        void onNestedPreferenceSelected(int key);
     }
 }

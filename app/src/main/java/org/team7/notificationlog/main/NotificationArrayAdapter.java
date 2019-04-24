@@ -81,13 +81,12 @@ public class NotificationArrayAdapter extends ArrayAdapter<DBNotification> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.list_item, parent, false);
             viewHolder.iconImageView = convertView.findViewById(R.id.imageView);
-            viewHolder.titleTextView = (TextView) convertView.findViewById(R.id.notificationTitle);
-            viewHolder.textTextView = (TextView) convertView.findViewById(R.id.notificationText);
-            viewHolder.timeTextView = (TextView) convertView.findViewById(R.id.notificationTime);
-            viewHolder.nameTextView = (TextView) convertView.findViewById(R.id.applicationName);
+            viewHolder.titleTextView = convertView.findViewById(R.id.notificationTitle);
+            viewHolder.textTextView = convertView.findViewById(R.id.notificationText);
+            viewHolder.timeTextView = convertView.findViewById(R.id.notificationTime);
+            viewHolder.nameTextView = convertView.findViewById(R.id.applicationName);
             convertView.setTag(viewHolder);
-        }
-        else { // reuse existing ViewHolder stored as the list item's tag
+        } else { // reuse existing ViewHolder stored as the list item's tag
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
@@ -126,7 +125,8 @@ public class NotificationArrayAdapter extends ArrayAdapter<DBNotification> {
 
         try {
             filteredDbn = new ProcessNotifs(filters).execute(dbns.toArray(new DBNotification[0])).get();
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
 
         Log.i("NotifArrayAdapter", "Updating notifications data with " + dbns.size() + " notif");
         Log.i("NotifArrayAdapter", "Filtered data contains " + filteredDbn.size() + " notif");

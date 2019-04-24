@@ -47,10 +47,9 @@ public class StringFilterAdapter extends ArrayAdapter<StringFilter> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.filter_list_item, parent, false);
 
-            viewHolder.filterTextView = (TextView) convertView.findViewById(R.id.filterTextView);
+            viewHolder.filterTextView = convertView.findViewById(R.id.filterTextView);
             convertView.setTag(viewHolder);
-        }
-        else {
+        } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
