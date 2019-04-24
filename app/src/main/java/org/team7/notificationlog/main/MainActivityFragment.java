@@ -10,6 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Spinner;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
 import org.team7.notificationlog.db.StringFilter;
 import org.team7.notificationlog.service.NLService;
@@ -41,8 +47,7 @@ public class MainActivityFragment extends Fragment {
         NLService.application_running = true;
 
         mvm = ViewModelProviders.of(this).get(MainActivityViewModel.class);
-        // List of StatusBarNotification objects representing the forecast TODO forecast?!?!?
-        List<DBNotification> notificationList = mvm.getNotificationsBase();
+        final List<DBNotification> notificationList = mvm.getNotificationsBase();
 
         // displays notification info
         final ListView notificationListView = view.findViewById(R.id.notificationListView);
@@ -59,12 +64,63 @@ public class MainActivityFragment extends Fragment {
         });
 
         Toolbar appBar = view.findViewById(R.id.toolbar);
-
         appBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 notificationListView.setSelection(0);
             }
+        });
+
+        // Default spinner value to preference value
+        final Spinner sort = view.findViewById(R.id.sortSpinner);
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        String pref = sharedPref.getString(getString(R.string.sortKey), "Time");
+        switch(pref){
+            case "App":
+                sort.setSelection(0);
+                break;
+            case "Time":
+                sort.setSelection(1);
+                break;
+        }
+
+        sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                SharedPreferences sharedPref = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(getString(R.string.sortKey), (String)sort.getSelectedItem());
+                editor.apply();
+
+                switch((String)sort.getSelectedItem()){
+                    case "App":
+                        Collections.sort(notificationList, new Comparator<DBNotification>() {
+                            @Override
+                            public int compare(DBNotification d1, DBNotification d2) {
+                                // Sort by App, then by time
+                                int cmp1 = d1.appName.compareTo(d2.appName);
+                                if (cmp1 != 0)
+                                    return cmp1;
+                                return d2.strTimestamp.compareTo(d1.strTimestamp);
+                            }
+                        });
+                        break;
+                    case "Time":
+                        Collections.sort(notificationList, new Comparator<DBNotification>() {
+                            @Override
+                            public int compare(DBNotification d1, DBNotification d2) {
+                                return d2.strTimestamp.compareTo(d1.strTimestamp);
+                            }
+                        });
+                        break;
+                }
+                notificationListView.setAdapter(notificationArrayAdapter);
+                notificationArrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {}
+
         });
 
         notificationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
