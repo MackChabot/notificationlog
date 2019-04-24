@@ -1,8 +1,6 @@
 package org.team7.notificationlog.filtering;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +12,6 @@ import org.team7.notificationlog.R;
 import org.team7.notificationlog.db.StringFilter;
 
 import java.util.List;
-
-import androidx.fragment.app.Fragment;
 
 public class StringFilterAdapter extends ArrayAdapter<StringFilter> {
 
@@ -55,7 +51,7 @@ public class StringFilterAdapter extends ArrayAdapter<StringFilter> {
 
         viewHolder.filterTextView.setText(getContext()
                 .getResources()
-                .getString(R.string.filter_format, sfs.type.equals("matches") ? "match" : "contain", sfs.filterText, sfs.target));
+                .getString(R.string.filter_format, sfs.type.equals("Matches") ? "match" : "contain", sfs.filterText, sfs.target));
 
         return convertView;
     }

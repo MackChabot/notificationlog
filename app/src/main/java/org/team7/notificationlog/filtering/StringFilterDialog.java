@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import org.team7.notificationlog.R;
+import org.team7.notificationlog.db.StringFilter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,9 +23,26 @@ import androidx.fragment.app.DialogFragment;
 public class StringFilterDialog extends DialogFragment {
 
     public StringFilterDialogCallback listener;
+    private String editOldTarget;
+    private String editOldType;
+    private String editOldFilterText;
+    private DeleteTask editDeleteOldTask;
+    private boolean isEdit = false;
 
     public static StringFilterDialog newInstance(StringFilterDialogCallback listener) {
         StringFilterDialog instance = new StringFilterDialog();
+        instance.listener = listener;
+        return instance;
+    }
+
+    public static StringFilterDialog newEditInstance(StringFilterDialogCallback listener, DeleteTask deleteTheOld, StringFilter oldFilter) {
+        StringFilterDialog instance = new StringFilterDialog();
+        instance.editOldTarget = oldFilter.target;
+        instance.editOldType = oldFilter.type;
+        instance.editOldFilterText = oldFilter.filterText;
+        instance.isEdit = true;
+        instance.editDeleteOldTask = deleteTheOld;
+
         instance.listener = listener;
         return instance;
     }
@@ -61,8 +79,31 @@ public class StringFilterDialog extends DialogFragment {
                 String filter = editText.getText().toString();
 
                 listener.onAdd(target, type, filter);
+                if (isEdit)
+                    editDeleteOldTask.execute();
             }
         });
+
+        // If edit mode, set values
+        if (isEdit) {
+            switch (editOldTarget) {
+                case "Title":
+                    targetSpinner.setSelection(0);
+                    break;
+                case "Text":
+                    targetSpinner.setSelection(1);
+                    break;
+            }
+            switch (editOldType) {
+                case "Match":
+                    typeSpinner.setSelection(0);
+                    break;
+                case "Contains":
+                    typeSpinner.setSelection(1);
+                    break;
+            }
+            editText.setText(editOldFilterText);
+        }
 
         return builder.create();
     }

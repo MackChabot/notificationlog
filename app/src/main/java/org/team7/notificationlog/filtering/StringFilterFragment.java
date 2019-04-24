@@ -17,10 +17,8 @@ import android.widget.ListView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.team7.notificationlog.R;
-import org.team7.notificationlog.db.DBNotification;
 import org.team7.notificationlog.db.NotificationDatabase;
 import org.team7.notificationlog.db.StringFilter;
-import org.team7.notificationlog.main.MainActivityViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +29,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-
-import static android.net.wifi.WifiConfiguration.Status.strings;
 
 public class StringFilterFragment extends Fragment implements StringFilterDialog.StringFilterDialogCallback {
 
@@ -81,6 +77,16 @@ public class StringFilterFragment extends Fragment implements StringFilterDialog
 
         final StringFilterDialog.StringFilterDialogCallback callback = this;
 
+        // Edit on click
+        filterListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final StringFilter clicked = (StringFilter) parent.getItemAtPosition(position);
+                StringFilterDialog.newEditInstance(callback, new DeleteTask(getContext(), clicked), clicked).show(getFragmentManager(), "SFDIALOG");
+            }
+        });
+
+        // Delete on long click
         filterListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
