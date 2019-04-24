@@ -1,4 +1,4 @@
-package org.team7.notificationlog;
+package org.team7.notificationlog.settings;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.view.View;
 import android.widget.Switch;
+
+import org.team7.notificationlog.main.MainActivityFragment;
+import org.team7.notificationlog.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +47,10 @@ public class NestedPreferenceFragment extends PreferenceFragment {
 
     // TODO call this in the background or something before we have to load these so it doesn't lag the app
     public static void updateValidAppPreferences(Context c, boolean showAllApps){
+
+        if (validAppPreferences.size() > 0)
+            return;
+
         final PackageManager pm = c.getPackageManager();
 
         //get a list of installed apps
@@ -57,8 +64,6 @@ public class NestedPreferenceFragment extends PreferenceFragment {
         });
 
         List<String> validPackages = MainActivityFragment.mvm.getPackages(c);
-
-        validAppPreferences.clear();
 
         for (PackageInfo p: packs) {
             if (showAllApps || validPackages.contains(p.packageName)) {
@@ -85,7 +90,7 @@ public class NestedPreferenceFragment extends PreferenceFragment {
                 PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(getActivity());
                 setPreferenceScreen(screen);
 
-                for (ExtendedSwitchPreference pref: validAppPreferences) {
+                for (final ExtendedSwitchPreference pref: validAppPreferences) {
 
                     pref.setSwitchClickListener(new ExtendedSwitchPreference.ExtendedSwitchListener() {
                         @Override
@@ -93,7 +98,9 @@ public class NestedPreferenceFragment extends PreferenceFragment {
 
                         @Override
                         public void onClick(View view) {
-                            startActivity(new Intent(getContext(), AppListActivity.class));
+                            Intent i = new Intent(getContext(), AppListActivity.class);
+                            i.putExtra("PACKAGE", pref.getKey());
+                            startActivity(i);
                         }
                     });
 

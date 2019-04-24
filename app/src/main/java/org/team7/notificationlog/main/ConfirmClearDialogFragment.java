@@ -1,7 +1,6 @@
-package org.team7.notificationlog;
+package org.team7.notificationlog.main;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -9,10 +8,10 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import java.util.List;
+import org.team7.notificationlog.R;
+import org.team7.notificationlog.db.NotificationDatabase;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.LiveData;
 import androidx.sqlite.db.SimpleSQLiteQuery;
 
 // class for the Erase Image dialog

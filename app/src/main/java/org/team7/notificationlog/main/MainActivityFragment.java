@@ -1,6 +1,6 @@
 // MainActivityFragment.java
 // Fragment in which the DoodleView is displayed
-package org.team7.notificationlog;
+package org.team7.notificationlog.main;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,7 +11,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.team7.notificationlog.db.StringFilter;
+import org.team7.notificationlog.service.NLService;
+import org.team7.notificationlog.R;
+import org.team7.notificationlog.db.DBNotification;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -46,7 +53,8 @@ public class MainActivityFragment extends Fragment {
         mvm.getNotifications(this.getActivity().getApplicationContext()).observe(this, new Observer<List<DBNotification>>() {
             @Override
             public void onChanged(List<DBNotification> dbNotifications) {
-                notificationArrayAdapter.setNotifData(dbNotifications);
+                Map<String, List<StringFilter>> filters = mvm.constructFilters(getContext());
+                notificationArrayAdapter.setNotifData(dbNotifications, filters);
             }
         });
 

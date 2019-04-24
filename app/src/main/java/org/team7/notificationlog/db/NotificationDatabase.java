@@ -1,4 +1,4 @@
-package org.team7.notificationlog;
+package org.team7.notificationlog.db;
 
 import android.content.Context;
 
@@ -9,10 +9,12 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {DBNotification.class}, version = 2)
+@Database(entities = {DBNotification.class, StringFilter.class}, version = 3)
 public abstract class NotificationDatabase extends RoomDatabase {
 
     public abstract DBNotificationDao dbNotificationDao();
+
+    public abstract StringFilterDao sfDao();
 
     private static String DBNAME = "main";
 

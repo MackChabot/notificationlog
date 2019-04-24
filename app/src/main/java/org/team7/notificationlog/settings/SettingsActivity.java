@@ -1,6 +1,8 @@
-package org.team7.notificationlog;
+package org.team7.notificationlog.settings;
 
 import android.os.Bundle;
+
+import org.team7.notificationlog.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

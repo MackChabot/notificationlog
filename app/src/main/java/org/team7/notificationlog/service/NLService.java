@@ -1,4 +1,4 @@
-package org.team7.notificationlog;
+package org.team7.notificationlog.service;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -13,12 +13,16 @@ import android.service.notification.StatusBarNotification;
 import android.text.SpannableString;
 import android.util.Log;
 
+import org.team7.notificationlog.BuildConfig;
+import org.team7.notificationlog.db.DBNotification;
+import org.team7.notificationlog.db.NotificationDatabase;
+
 import java.util.HashMap;
 
 public class NLService extends NotificationListenerService {
     // true if application is open. False if is just the service that's running
     // TODO probably replace this variable with a broadcast receiver
-    protected static boolean application_running = false;
+    public static boolean application_running = false;
 
     private String TAG = this.getClass().getSimpleName();
 
@@ -116,7 +120,6 @@ public class NLService extends NotificationListenerService {
         return sp.getBoolean(categories.get(n.category), true);
     }
 
-
     private String getAppName(String packageName) {
 
         PackageManager pm = getApplicationContext().getPackageManager();
@@ -131,7 +134,6 @@ public class NLService extends NotificationListenerService {
 
         return appName;
     }
-
 }
 
 class InsertDbTask extends AsyncTask<DBNotification, Void, Void> {

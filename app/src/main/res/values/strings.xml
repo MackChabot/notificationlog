@@ -11,4 +11,18 @@
     <string name="no">No</string>
     <string name="ok">Ok</string>
     <string name="settings">Settings</string>
+    <string name="filter_format">Exclude notifications that %s \"%s\" in the %s portion.</string>
+    <string name="delete_filter_title">Delete</string>
+    <string name="delete_filter_message">Delete filter?</string>
+
+    <string-array name="content_options">
+        <item>Title</item>
+        <item>Text</item>
+    </string-array>
+
+    <string-array name="match_options">
+        <item>matches</item>
+        <item>contains</item>
+    </string-array>
+
 </resources>

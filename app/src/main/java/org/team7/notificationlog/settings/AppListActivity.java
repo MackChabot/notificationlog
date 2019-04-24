@@ -1,11 +1,12 @@
-package org.team7.notificationlog;
+package org.team7.notificationlog.settings;
 
-import android.app.Activity;
 import android.os.Bundle;
+
+import org.team7.notificationlog.R;
+import org.team7.notificationlog.filtering.StringFilterFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NavUtils;
 
 public class AppListActivity extends AppCompatActivity {
 
@@ -21,8 +22,9 @@ public class AppListActivity extends AppCompatActivity {
         }
 
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.content_app_fragment, new StringFilterFragment())
+            String pkg = getIntent().getExtras().getString("PACKAGE");
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.content_app_fragment, StringFilterFragment.newInstance(pkg))
                     .commit();
         }
     }

@@ -1,4 +1,4 @@
-package org.team7.notificationlog;
+package org.team7.notificationlog.settings;
 
 import android.content.Context;
 import android.preference.SwitchPreference;
@@ -11,10 +11,6 @@ import android.widget.Switch;
  * Custom preference for handling a switch with a clickable preference area as well
  */
 public class ExtendedSwitchPreference extends SwitchPreference {
-
-    //
-    // Public interface
-    //
 
     /**
      * Sets listeners for the switch and the background container preference view cell

@@ -1,9 +1,11 @@
-package org.team7.notificationlog;
+package org.team7.notificationlog.settings;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+
+import org.team7.notificationlog.R;
 
 public class SettingsActivityFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 

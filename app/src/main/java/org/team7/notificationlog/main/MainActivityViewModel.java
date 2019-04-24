@@ -1,4 +1,4 @@
-package org.team7.notificationlog;
+package org.team7.notificationlog.main;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -9,8 +9,14 @@ import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
+import org.team7.notificationlog.db.DBNotification;
+import org.team7.notificationlog.db.NotificationDatabase;
+import org.team7.notificationlog.db.StringFilter;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -102,17 +108,52 @@ public class MainActivityViewModel extends AndroidViewModel {
             if (sp.getBoolean(p.packageName,true))
                  apps.add(p.packageName);
 
-//        List<PackageInfo> packs = pm.getInstalledPackages(0);
-//        for (int i = 0; i < packs.size(); i++) {
-//            PackageInfo p = packs.get(i);
-//            if (NestedPreferenceFragment.notExcludedApp(p,c))
-//                if (sp.getBoolean(p.packageName,true))
-//                    apps.add(p.packageName);
-//        }
-
         return apps;
     }
+
+    public Map<String, List<StringFilter>> constructFilters(Context c) {
+
+        Map<String, List<StringFilter>> filterMap = new HashMap<>();
+
+        List<StringFilter> allFilters = new ArrayList<>();
+        try {
+            allFilters = new GetAllFiltersTask(c).execute().get();
+        } catch (Exception ignore) {}
+
+        for (StringFilter sf : allFilters) {
+
+            List<StringFilter> filtersForPackage = filterMap.get(sf.appPackage);
+
+            if (filtersForPackage == null) {
+                filtersForPackage = new ArrayList<>();
+                filtersForPackage.add(sf);
+                filterMap.put(sf.appPackage, filtersForPackage);
+            } else {
+                filtersForPackage.add(sf);
+                filterMap.put(sf.appPackage, filtersForPackage);
+            }
+        }
+
+        return filterMap;
+    }
 }
+
+class GetAllFiltersTask extends AsyncTask<Void, Void, List<StringFilter>> {
+
+    // The only way to do this afaik
+    @SuppressLint("StaticFieldLeak")
+    private Context c;
+
+    public GetAllFiltersTask(Context context) {
+        c = context;
+    }
+
+    @Override
+    protected List<StringFilter> doInBackground(Void... voids) {
+        return NotificationDatabase.getDatabase(c).sfDao().getAllFilters();
+    }
+}
+
 
 class GetAllTask extends AsyncTask<Void, Void, List<DBNotification>> {
 

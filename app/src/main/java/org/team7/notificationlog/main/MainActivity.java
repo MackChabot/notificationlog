@@ -1,4 +1,4 @@
-package org.team7.notificationlog;
+package org.team7.notificationlog.main;
 
 import android.content.ComponentName;
 import android.content.DialogInterface;
@@ -10,6 +10,10 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import org.team7.notificationlog.service.NLService;
+import org.team7.notificationlog.R;
+import org.team7.notificationlog.settings.SettingsActivity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,4 +1,4 @@
-package org.team7.notificationlog;
+package org.team7.notificationlog.settings;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.app.Fragment;
+
+import org.team7.notificationlog.R;
 
 public class AppListFragment extends Fragment {
 
