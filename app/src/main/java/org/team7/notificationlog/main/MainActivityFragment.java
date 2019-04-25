@@ -9,22 +9,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
+
+import org.team7.notificationlog.R;
+import org.team7.notificationlog.db.DBNotification;
+import org.team7.notificationlog.db.StringFilter;
+import org.team7.notificationlog.service.NLService;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
-
-import org.team7.notificationlog.db.StringFilter;
-import org.team7.notificationlog.service.NLService;
-import org.team7.notificationlog.R;
-import org.team7.notificationlog.db.DBNotification;
-
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -71,63 +68,42 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
-        // Default spinner value to preference value
-        final Spinner sort = view.findViewById(R.id.sortSpinner);
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        String pref = sharedPref.getString(getString(R.string.sortKey), "Time");
-        switch (pref) {
-            case "App":
-                sort.setSelection(0);
-                break;
-            case "Time":
-                sort.setSelection(1);
-                break;
-        }
+        final Button sortTime = view.findViewById(R.id.sortButtonTime);
+        final Button sortApp = view.findViewById(R.id.sortButtonApp);
 
-        sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        final String pref = sharedPref.getString(getString(R.string.sortKey), "Time");
+
+        switchSortMode(pref, sortApp, sortTime, notificationList);
+
+        View.OnClickListener buttonListener = new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            public void onClick(View v) {
+                // disables the listener that is no longer needed
+                notificationListView.setOnHierarchyChangeListener(null);
+
                 SharedPreferences sharedPref = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(getString(R.string.sortKey), (String) sort.getSelectedItem());
+
+                Button thisButton = (Button) v;
+                String buttonText = thisButton.getText().toString();
+
+                editor.putString(getString(R.string.sortKey), buttonText);
                 editor.apply();
 
-                switch ((String) sort.getSelectedItem()) {
-                    case "App":
-                        Collections.sort(notificationList, new Comparator<DBNotification>() {
-                            @Override
-                            public int compare(DBNotification d1, DBNotification d2) {
-                                // Sort by App, then by time
-                                int cmp1 = d1.appName.compareTo(d2.appName);
-                                if (cmp1 != 0)
-                                    return cmp1;
-                                return d2.strTimestamp.compareTo(d1.strTimestamp);
-                            }
-                        });
-                        break;
-                    case "Time":
-                        Collections.sort(notificationList, new Comparator<DBNotification>() {
-                            @Override
-                            public int compare(DBNotification d1, DBNotification d2) {
-                                return d2.strTimestamp.compareTo(d1.strTimestamp);
-                            }
-                        });
-                        break;
-                }
+                switchSortMode(buttonText, sortApp, sortTime, notificationList);
+
                 notificationListView.setAdapter(notificationArrayAdapter);
                 notificationArrayAdapter.notifyDataSetChanged();
             }
+        };
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-            }
-
-        });
+        sortTime.setOnClickListener(buttonListener);
+        sortApp.setOnClickListener(buttonListener);
 
         notificationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 DBNotification dbn = (DBNotification) parent.getItemAtPosition(position);
 
                 PackageManager pm = getContext().getPackageManager();
@@ -153,7 +129,49 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
+        // Once the list is populated, update based on the switch mode
+        // This only needs to be done initially, so this listener is removed the next time the switch mode is accessed
+        notificationListView.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+            @Override
+            public void onChildViewAdded(View parent, View child) {
+                switchSortMode(pref, sortApp, sortTime, notificationList);
+            }
+
+            @Override
+            public void onChildViewRemoved(View parent, View child) {}
+        });
+
+
+
         return view;
     }
 
+    private void switchSortMode(String sortMode, Button sortApp, Button sortTime, List<DBNotification> notificationList) {
+        switch(sortMode) {
+            case "App":
+                sortApp.setBackgroundResource(R.color.colorPrimaryDark);
+                sortTime.setBackgroundResource(R.color.colorPrimary);
+                Collections.sort(notificationList, new Comparator<DBNotification>() {
+                    @Override
+                    public int compare(DBNotification d1, DBNotification d2) {
+                        // Sort by App, then by time
+                        int cmp1 = d1.appName.compareTo(d2.appName);
+                        if (cmp1 != 0)
+                            return cmp1;
+                        return d2.strTimestamp.compareTo(d1.strTimestamp);
+                    }
+                });
+                break;
+            case "Time":
+                sortApp.setBackgroundResource(R.color.colorPrimary);
+                sortTime.setBackgroundResource(R.color.colorPrimaryDark);
+                Collections.sort(notificationList, new Comparator<DBNotification>() {
+                    @Override
+                    public int compare(DBNotification d1, DBNotification d2) {
+                        return d2.strTimestamp.compareTo(d1.strTimestamp);
+                    }
+                });
+                break;
+        }
+    }
 }
