@@ -15,6 +15,8 @@
     <string name="sortKey">sortKey</string>
     <string name="delete_filter_message">Delete filter?</string>
     <string name="delete_filter_title">Delete</string>
+    <string name="filters_single">1 filter</string>
+    <string name="filters_plural">%s filters</string>
 
     <string-array name="content_options">
         <item>Title</item>

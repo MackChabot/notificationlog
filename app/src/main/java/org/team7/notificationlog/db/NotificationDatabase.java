@@ -24,6 +24,7 @@ public abstract class NotificationDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context, NotificationDatabase.class, DBNAME)
                     .addMigrations(Migration_1_2)
+                    .allowMainThreadQueries()
                     .build();
         }
         return INSTANCE;

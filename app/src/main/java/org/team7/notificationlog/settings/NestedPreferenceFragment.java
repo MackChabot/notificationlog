@@ -10,6 +10,7 @@ import android.preference.PreferenceScreen;
 import android.view.View;
 import android.widget.Switch;
 
+import org.team7.notificationlog.db.NotificationDatabase;
 import org.team7.notificationlog.main.MainActivityFragment;
 import org.team7.notificationlog.R;
 
@@ -72,7 +73,17 @@ public class NestedPreferenceFragment extends PreferenceFragment {
                 // TODO AppList not used currently, but could be used if adding images later
                 ExtendedSwitchPreference pref = new ExtendedSwitchPreference(c);
                 pref.setKey(p.packageName);
-                pref.setSummary(p.packageName); //TODO for debugging
+
+                int numFilters = NotificationDatabase.getDatabase(getContext()).sfDao().getNumFiltersForPkg(p.packageName);
+
+                String filterSummary = "";
+                if (numFilters == 1)
+                    filterSummary = getString(R.string.filters_single);
+                else
+                    filterSummary = getString(R.string.filters_plural, Integer.toString(numFilters));
+
+                pref.setSummary(filterSummary);
+
                 pref.setTitle(p.applicationInfo.loadLabel(pm).toString());
                 pref.setDefaultValue(true);
                 validAppPreferences.add(pref);
@@ -113,7 +124,6 @@ public class NestedPreferenceFragment extends PreferenceFragment {
                 break;
         }
     }
-
 }
 
 

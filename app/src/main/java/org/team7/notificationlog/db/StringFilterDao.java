@@ -11,6 +11,9 @@ import androidx.room.Query;
 @Dao
 public interface StringFilterDao {
 
+    @Query("SELECT COUNT(*) FROM filters WHERE package = :pkg")
+    int getNumFiltersForPkg(String pkg);
+
     @Query("SELECT DISTINCT package FROM filters")
     List<String> getPackagesWithFilters();
 

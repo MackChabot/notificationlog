@@ -18,7 +18,12 @@
             android:layout_height="wrap_content"
             android:text="Facebook"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            />
         <!--android:textStyle="bold"-->
 
         <!--<TextView-->
