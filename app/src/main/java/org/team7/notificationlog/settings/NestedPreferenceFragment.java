@@ -25,7 +25,7 @@ public class NestedPreferenceFragment extends PreferenceFragment {
 
     private static final String TAG_KEY = "NESTED_KEY";
 
-    private static List<ExtendedSwitchPreference> validAppPreferences = new ArrayList<>();
+    private List<ExtendedSwitchPreference> validAppPreferences = new ArrayList<>();
 
     public static NestedPreferenceFragment newInstance(int key) {
         NestedPreferenceFragment fragment = new NestedPreferenceFragment();
@@ -46,10 +46,14 @@ public class NestedPreferenceFragment extends PreferenceFragment {
     }
 
     // TODO call this in the background or something before we have to load these so it doesn't lag the app
-    public static void updateValidAppPreferences(Context c, boolean showAllApps) {
+    public  void updateValidAppPreferences(Context c, boolean showAllApps) {
+        List<String> validPackages = MainActivityFragment.mvm.getPackages(c);
 
-        if (validAppPreferences.size() > 0)
+        //if there are no new preferences, don't waste time updating
+        if (validAppPreferences.size() == validPackages.size())
             return;
+
+        validAppPreferences.clear();
 
         final PackageManager pm = c.getPackageManager();
 
@@ -62,8 +66,6 @@ public class NestedPreferenceFragment extends PreferenceFragment {
                 return p1.applicationInfo.loadLabel(pm).toString().compareTo(p2.applicationInfo.loadLabel(pm).toString());
             }
         });
-
-        List<String> validPackages = MainActivityFragment.mvm.getPackages(c);
 
         for (PackageInfo p : packs) {
             if (showAllApps || validPackages.contains(p.packageName)) {

@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/colorBackground"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -17,25 +18,25 @@
             android:layout_height="wrap_content"
             android:text="Facebook"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="22sp"/>
-            <!--android:textStyle="bold"-->
+            android:textSize="22sp" />
+        <!--android:textStyle="bold"-->
 
         <!--<TextView-->
-            <!--android:id="@+id/type"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="10/30/17 4:50 AM"-->
-            <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-            <!--android:textSize="14sp"-->
-            <!--android:textStyle="italic" />-->
+        <!--android:id="@+id/type"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="10/30/17 4:50 AM"-->
+        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+        <!--android:textSize="14sp"-->
+        <!--android:textStyle="italic" />-->
 
         <!--<TextView-->
-            <!--android:id="@+id/text"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Notification Title"-->
-            <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-            <!--android:textSize="22sp" />-->
+        <!--android:id="@+id/text"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Notification Title"-->
+        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+        <!--android:textSize="22sp" />-->
 
     </LinearLayout>
 </LinearLayout>
